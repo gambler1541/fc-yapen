@@ -1,0 +1,149 @@
+.yapen-searchContainer {
+  width: 1220px;
+  position: relative;
+  margin: 0 auto;
+  padding-bottom: 50px;
+}
+
+.yapen-searchContainer .yapen-searchLayer {
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension {
+  height: 350px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 10px;
+  border: 1px solid #e6e5e5;
+  padding: 0;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl {
+  width: 100%;
+  position: relative;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionImageLayer {
+  width: 600px;
+  height: 350px;
+  position: relative;
+  border-right: 1px solid #e6e5e5;
+  cursor: pointer;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionImageLayer .yapen-pensionName {
+  width: 90%;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
+  background: rgba(0, 0, 0,0.6);
+  color: #fff;
+  text-align: left;
+  font-size: 20px;
+  padding: 15px 5%;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer {
+  height: 350px;
+  overflow-y: auto;
+  position: relative;
+  display: inline-block;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl {
+  width: 100%;
+  position: relative;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl thead tr th.yapen-roomName {
+  padding-left: 40px;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl thead tr th  {
+  padding: 15px 0;
+  font-size: 14px;
+  color: #000;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #e6e5e5;
+  text-align: center;
+}
+
+th {
+  font-weight: bold;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.roomPicIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  margin-top: -9px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.yapen-roomMame {
+  padding-left: 40px;
+  cursor: pointer;
+  width: 130px;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.yapen-roomMame .yapen-roomNameLayer {
+  width: 130px;
+  text-overflow: ellipsis;
+  display: block;
+  margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td {
+  padding: 15px 0;
+  font-size: 14px;
+  color: #000;
+  border-bottom: 1px solid #e6e5e5;
+  text-align: center;
+  position: relative;
+  width: 110px;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.yapen-price {
+  padding-left: 10px;
+  width: 110px;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.yapen-price .yapen-basicPrice {
+  font-size: 12px;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.yapen-reserve {
+  width: 30px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionRoomLayer .yapen-pensionRoomTbl tbody tr td.reserveArrow {
+  border: solid #666;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+
+}
+
+
+
+
+
+
+

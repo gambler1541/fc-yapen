@@ -1,0 +1,57 @@
+
+.revPeople {
+  background-color: #f5f5f5;
+  width: 1220px;
+  margin: 0 auto;
+  border-bottom: 1px solid #606060;
+  color: #333;
+  padding: 20px 0;
+  position: relative;
+  transform-origin: 0% 0%;
+}
+
+.revPeople p {
+  width: 90%;
+  margin: 10px auto;
+  height: 20px;
+  position: relative;
+}
+
+.revPeople p label {
+  float: left;
+}
+
+.revPeople p span {
+  float: right;
+}
+
+.revPeople p span input[type=text] {
+  border: 2px solid #d1d1d1;
+  width: 40px;
+  padding: 5px 8px;
+}
+
+.revPeople .graphBar {
+  width: 90%;
+  margin: 20px auto;
+  background-color: #fff;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.revPeople .graphBar .graphBtn {
+  width: 96px;
+  height: 38px;
+  border: 2px solid #ff4141;
+  background-color: #ff6559;
+  border-radius: 4px;
+  padding: 10px 0;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  transition: .3s;
+}
+
+
+
