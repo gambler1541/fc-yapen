@@ -16,5 +16,4 @@ export class YapenFooterComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
