@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-yapen-footer',
   template: `
     <p>
-      yapen-footer works!
+      yapen-footer works!!!
     </p>
   `,
   styles: [
