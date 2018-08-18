@@ -8,8 +8,7 @@ import { Component, Input } from '@angular/core';
     <button (click)="visible=!visible"> login </button><a> | </a>
     <a routerLink="/signup">  signup</a><a> | </a>
     `,
-  styles: [
-  ]
+  styles: []
 })
 export class YapenHeaderComponent {
   @Input()
