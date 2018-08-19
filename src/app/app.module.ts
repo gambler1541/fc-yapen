@@ -1,9 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound.component';
 import { YapenSearchbarComponent } from './yapen-one/yapen-searchbar.component';
@@ -20,6 +18,16 @@ import { YapenSignupComponent } from './yapen-three/yapen-signup.component';
 import { YapenHeaderComponent } from './yapen-header.component';
 import { YapenFooterComponent } from './yapen-footer.component';
 import { YapenContainerComponent } from './yapen-container.component';
+import { LocalComponent } from './yapen-one/local/local.component';
+import { PeopleComponent } from './yapen-one/people/people.component';
+import { ThemeComponent } from './yapen-one/theme/theme.component';
+import { ConditionComponent } from './yapen-one/condition/condition.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { YapenRoomlistComponent } from './yapen-one/yapen-roomlist/yapen-roomlist.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SlideComponent } from './yapen-one/slide/slide.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -51,11 +59,21 @@ const routes: Routes = [
     YapenSignupComponent,
     YapenHeaderComponent,
     YapenFooterComponent,
-    YapenContainerComponent
+    YapenContainerComponent,
+    LocalComponent,
+    PeopleComponent,
+    ThemeComponent,
+    ConditionComponent,
+    YapenRoomlistComponent,
+    SlideComponent
   ],
   imports: [
-    BrowserModule, FormsModule, HttpClientModule,
-    RouterModule.forRoot(routes)
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(routes),
+    HttpClientModule,
+    FormsModule,
+    NgbModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

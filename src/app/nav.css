@@ -1,0 +1,76 @@
+a {
+  color: #1a0500;
+}
+
+ul {
+  margin-top: 5px;
+}
+
+.yapenGuideHead .navLayer .nav .nav-li {
+  float: left;
+  margin-right: 30px;
+}
+
+.yapenGuideHead {
+  height: 50px;
+  padding: 0px;
+  text-align: left;
+}
+
+.yapenGuideHead .navLayer {
+  width: 1220px;
+  margin: 0 auto;
+}
+
+.yapenGuideHead .navLayer .nav-item {
+  float: left;
+  padding: 5px 0;
+  height: 40px;
+}
+
+.topLayer {
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 30px;
+  color: #1a0500;
+  font-size: 300%;
+  width: 1220px;
+  position: relative;
+}
+
+.pensiontext-1 {
+  position: relative;
+  color: #1a0500;
+}
+
+.pensiontext-2 {
+  position: relative;
+  color: #ff3300;
+}
+
+.yapenGuideHead .navLayer .nav .searchbar {
+  float: right;
+  border-bottom: 1px solid #ddd;
+  padding: 5px 0;
+  height: 40px;
+  margin-top: 5px;
+}
+
+.yapenGuideHead .navLayer .nav .searchbar .sbText {
+  border: 0px;
+  font-size: 14px;
+  height: 30px;
+  position: relative;
+  text-align: left;
+  margin-left: 10px;
+
+}
+
+.yapenGuideHead .navLayer .nav .searchbar .first-img {
+  position: relative;
+  top: -3px;
+}
+
+[placeholder] {
+  color: #000 !important;
+}
