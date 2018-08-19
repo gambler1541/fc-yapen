@@ -23,7 +23,7 @@ import { Component, OnInit } from '@angular/core';
           <tbody>
             <tr>
               <th scope="row">펜션명</th>
-              <td>가평 나르샤의정원펜션</td>
+              <td class="pension-name">가평 나르샤의정원펜션</td>
             </tr>
             <tr>
               <th scope="row">주소</th>
@@ -35,8 +35,8 @@ import { Component, OnInit } from '@angular/core';
             </tr>
             <tr>
               <th scope="row">요금타입</th>
-              <td><span>2018월 19일 (일)</span>
-                    은 주말 요금이 적용됩니다.</td>
+              <td><span style="color: #FF6559;">2018월 19일 (일)</span>
+                    은 <span style="color: #FF6559;">주말</span>요금이 적용됩니다.</td>
             </tr>
           </tbody>
         </table>
@@ -159,7 +159,98 @@ import { Component, OnInit } from '@angular/core';
   <!-- reserve page -->
 
   `,
-  styles: []
+  styles: [`
+    .reserve-page{
+      margin: 0;
+      padding: 0;
+      line-height: 1.3;
+      font-size: 12px;
+      font-family: dotum, 맑은 고딕, "Malgun Gothic", "맑은 고딕", Tahoma, Geneva, sans-serif;
+      word-break: break-all;
+      color: #444;
+    }
+    .reserve-info{
+      position: relative;
+      min-height: 308px;
+      margin: 24px 10px;
+    }
+    .reserve-calendar{
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .reserve-basic-info{
+      padding: 15px 0 0 310px;
+    }
+    .reserve-basic-info .today-date{
+      float: right;
+      margin: 0 10px 13px 0;
+    }
+    .basic-info-table{
+      width: 100%;
+      height: 150px;
+    }
+    .basic-info-table th{
+      background: #f7f7f7;
+      padding-left: 20px;
+      width: 90px;
+    }
+    .basic-info-table td{
+      padding-left: 20px;
+    }
+    .pension-name{
+      color: #ff6559;
+      font-weight: bold;
+    }
+    .select-date{
+      margin: 10px 10px;
+    }
+    .select-date span{
+      font-size: 16px;
+      color: #ff6559;
+      font-weight: bold;
+    }
+    .room-info{
+      margin: 24px 10px;
+    }
+    .room-info-table{
+      width: 100%;
+    }
+    .room-info-table th{
+      background: #f7f7f7;
+      height: 50px;
+      border-top: 2px solid #555;
+      border-bottom: 1px solid #bbb;
+      text-align: center;
+    }
+    .room-info-table tr{
+      height: 50px;
+      text-align: center;
+    }
+    .bg-color{
+      background-color: rgb(244, 248, 254);
+    }
+    .total-price{
+      padding: 29px 15px 0 0;
+      text-align: right;
+      font-size: 16px;
+    }
+    .reserve-btn{
+      margin: 70px auto;
+      text-align: center;
+    }
+    .reserve-btn button{
+      padding: 10px 100px;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 3px;
+      background: #ff6559;
+      color: #fff;
+    }
+    .btn-primary{
+      border-color: white;
+    }
+  `]
 })
 export class YapenReserveComponent implements OnInit {
 
