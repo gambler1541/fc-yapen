@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound.component';
@@ -55,7 +56,8 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule, FormsModule, HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    NgbModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
