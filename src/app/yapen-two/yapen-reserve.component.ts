@@ -13,23 +13,9 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
       <!-- reserve calendar -->
       <section class="reserve-calendar">
 
-        <ngb-datepicker #dp (select)="onDateSelection($event)"
-          class="date-picker"
-          [firstDayOfWeek]="firstDayOfWeek"
-          [markDisabled]="isDisabled"
-          [dayTemplate]="t">
-        </ngb-datepicker>
-
-        <ng-template #t let-date="date" let-currentMonth="currentMonth"
-        let-disabled="disabled">
-
-          <span class="custom-day"
-            [style.background-color]="(isDarked(date) ? '#CCC' : '')"
-            [class.hidden]="date.month !== currentMonth"
-            >
-            {{ date.day }}
-          </span>
-        </ng-template>
+        <app-yapen-calendar
+        (changeDate)="onDateSelection($event)"
+        ></app-yapen-calendar>
 
       </section>
       <!-- reserve calendar -->
@@ -199,11 +185,6 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
       left: 0;
       padding-top: 40px;
     }
-    .custom-day{
-      margin: 0;
-      padding: 0;
-      border: 1px solid rgba(0, 0, 0, 0.125);
-    }
     .reserve-basic-info{
       padding: 15px 0 0 310px;
     }
@@ -299,23 +280,6 @@ export class YapenReserveComponent implements OnInit {
 
   // --- Calendar Implementation Start ---
 
-  // get new date
-  getEachDate(date: NgbDateStruct) {
-    return new Date(date.year, date.month - 1, date.day + 1);
-  }
-
-  // Make the dates before today color dark such as gray
-  isDarked(date: NgbDateStruct) {
-    return this.getEachDate(date).getTime() < this.today.getTime();
-  }
-
-  // Disable the dates bofre today & the months that are NOT current month
-  isDisabled(date: NgbDateStruct, current: {month: number}) {
-    const eachDate = new Date(date.year, date.month - 1, date.day + 1);
-    const todayDate = new Date().getTime();
-    return eachDate.getTime() < todayDate || date.month !== current.month;
-  }
-
   // when selecting a date, change to the date selected and to room status
   onDateSelection(date: NgbDateStruct) {
     this.selectedDate = date;
@@ -342,6 +306,7 @@ export class YapenReserveComponent implements OnInit {
     const eachDate = new Date(date.year, date.month - 1, date.day);
     return eachDate.getDay() === 0 || eachDate.getDay() === 6;
   }
+
 
   // --- Calendar Implementation End ---
 
