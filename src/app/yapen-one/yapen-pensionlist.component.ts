@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-yapen-pensionlist',
   template: `
     <p> yapen-pensionlist works! </p>
-    <a routerLink="/reserve">reserve</a><br>
+    <a [routerLink]="['/reserve/', 1, '2018-08-19']">reserve</a><br>
     <a routerLink="/pensiondetail">pensiondetail</a>
   `,
   styles: []

@@ -21,13 +21,14 @@ import { YapenSignupComponent } from './yapen-three/yapen-signup.component';
 import { YapenHeaderComponent } from './yapen-header.component';
 import { YapenFooterComponent } from './yapen-footer.component';
 import { YapenContainerComponent } from './yapen-container.component';
+import { RangeDirective } from './range.directive';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: YapenContainerComponent},
   { path: 'pensionlist', component: YapenPensionlistComponent},
   { path: 'pensiondetail', component: YapenPensiondetailComponent},
-  { path: 'reserve', component: YapenReserveComponent},
+  { path: 'reserve/:pk/:date', component: YapenReserveComponent},
   { path: 'pay', component: YapenPayComponent},
   { path: 'payfinish', component: YapenPayfinishComponent},
   { path: 'login', component: YapenLoginComponent},
@@ -52,7 +53,8 @@ const routes: Routes = [
     YapenSignupComponent,
     YapenHeaderComponent,
     YapenFooterComponent,
-    YapenContainerComponent
+    YapenContainerComponent,
+    RangeDirective
   ],
   imports: [
     BrowserModule, FormsModule, HttpClientModule,

@@ -1,5 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
+
+interface Pension {
+  pk: number;
+  name: string;
+  address: string[];
+  rooms: Room[];
+}
+
+interface Room {
+  pk: number;
+  name: string;
+  size: number;
+  normal_num_poeple: number;
+  max_num_people: number;
+  price: number;
+  extra_charge_adult: number;
+  extra_charge_child: number;
+  extra_charge_baby: number;
+  status: boolean;
+}
 
 @Component({
   selector: 'app-yapen-reserve',
@@ -28,11 +51,11 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
           <tbody>
             <tr>
               <th scope="row">펜션명</th>
-              <td class="pension-name">가평 나르샤의정원펜션</td>
+              <td class="pension-name">{{ pensionName }}</td>
             </tr>
             <tr>
               <th scope="row">주소</th>
-              <td>경기 가평군 상면 임초리 130</td>
+              <td>{{ pensionAddress }}</td>
             </tr>
             <tr>
               <th scope="row">결제방법</th>
@@ -83,22 +106,28 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 
           <!-- for each room -->
-          <tr>
+          <tr *ngFor="let room of rooms" [class.bg-color]="room.pk===checkedPk">
             <td class="room-name">
               <span>
-                <input type="checkbox" id="1" checked>
-                <label for="1">아쿠아(독채,복층)</label>
+                <input type="checkbox" [attr.id]="room.pk" [checked]="room.pk===checkedPk"
+                (change)="changeRoom(room.pk, selectStayNum.value, selectAdultNum.value,
+                  selectChildNum.value, selectBabyNum.value)" [disabled]="!room.status">
+                  <label [attr.for]="room.pk">{{ room.name }}</label>
               </span>
             </td>
-            <td><button type="button" class="btn btn-danger btn-sm">
-              예약가능</button></td>
-            <td>15평, 2명 / 3명</td>
+            <td><button type="button" class="btn btn-{{ room.status ? 'danger' : 'success'}} btn-sm">
+              {{ room.status ? '예약가능': '예약완료' }}</button></td>
+            <td>{{ room.size }}, {{ room.normal_num_poeple }}명 / {{ room.max_num_people }}명</td>
             <td>
 
               <!-- for period -->
               <div class="input-group mb-3">
-                <select class="custom-select" id="1"
-                class.disabled-select>
+                <select class="custom-select" [attr.id]="room.pk" class="selectStayBox"
+                [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
+                (change)="selectPeriod($event.target.value)" #selectStayNum>
+                <ng-container *range="[1, 6] let stayNum;">
+                  <option [value]="stayNum">{{ stayNum }}박</option>
+                </ng-container>
                 </select>
               </div>
               <!-- for period -->
@@ -108,26 +137,39 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
               <!-- the number of people for each room -->
               <span>성인:
-                <select class="custom-select" id="1">
+                <select class="custom-select" [attr.id]="room.pk"
+                  [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
+                  (change)="selectAdult($event.target.value)" #selectAdultNum>
+                <ng-container *range="[room.normal_num_poeple, room.max_num_people]; let adultNum">
+                  <option [value]="adultNum">{{ adultNum }}명</option>
+                </ng-container>
                 </select>
               </span>
 
               <span> 아동:
-                <select class="custom-select" id="1">
+                <select class="custom-select" [attr.id]="room.pk"
+                  [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
+                  (change)="selectChild($event.target.value)" #selectChildNum>
+                <ng-container *range="[0, room.max_num_people]; let childNum">
+                  <option [value]="childNum">{{ childNum }}명</option>
+                </ng-container>
                 </select>
               </span>
 
-              <!-- [value]="(room.pk===checkedPk ? k : room.normal_num_poeple)" -->
-
               <span> 유아:
-                <select class="custom-select" id="1">
+                <select class="custom-select" [attr.id]="room.pk"
+                  [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
+                  (change)="selectBaby($event.target.value)" #selectBabyNum>
+                  <ng-container *range="[0, room.max_num_people]; let babyNum">
+                    <option [value]="babyNum">{{ babyNum }}명</option>
+                  </ng-container>
                 </select>
               </span>
               <!-- the number of people for each room -->
 
             </td>
-            <td class="basic-price"> 149000원</td>
-            <td>149000원</td>
+            <td class="basic-price">{{ room.price }}원</td>
+            <td>{{ room.price }}원</td>
 
 
           </tr>
@@ -141,13 +183,12 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
       <!-- room info table -->
 
       <!-- total price for the room selected -->
-      <div class="total-price">
+      <div class="total-price" *ngIf="rooms">
         <p>
-          <strong>결제금액:</strong>
-          <span>0</span>
-          <span>원</span>
+          <b>결제금액:</b>
+          <strong>{{ totalPrice }}원</strong>
         </p>
-        <span></span>
+        <span>{{ extraChargeTotal ? '현장결제:' + extraChargeTotal + '원': '' }}</span>
       </div>
       <!-- total price for the room selected -->
 
@@ -162,6 +203,8 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
   </div>
   <!-- reserve page -->
+
+  <pre>{{ rooms | json }}</pre>
 
   `,
   styles: [`
@@ -236,10 +279,24 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
     .bg-color{
       background-color: rgb(244, 248, 254);
     }
+    .room-name label{
+      margin-left: 5px;
+    }
+    .selectStayBox{
+      margin-left: 10px;
+    }
     .total-price{
       padding: 29px 15px 0 0;
       text-align: right;
       font-size: 16px;
+    }
+    .total-price strong{
+      color: #ff6559;
+      margin-left: 5px;
+    }
+    .total-price span{
+      color: #4491cc;
+      margin-left: 5px;
     }
     .reserve-btn{
       margin: 70px auto;
@@ -256,6 +313,9 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
     .btn-primary{
       border-color: white;
     }
+    .disabled-select {
+      color: #888;
+    }
   `]
 })
 export class YapenReserveComponent implements OnInit {
@@ -268,15 +328,67 @@ export class YapenReserveComponent implements OnInit {
 
   checkInDate: NgbDateStruct;
 
+  pensions: Pension;
+
+  pensionPk: number;
+
+  rooms: Room[];
+
+  urlDate = 'https://www.pmb.kr/reservation';
+
+  urlInfo: 'https://www.pmb.kr/reservation/info';
+
+  checkedPk: number = 1;
+
+  stayDayNum: number = 1;
+
+  adultNum: number;
+
+  childNum: number = 0;
+
+  babyNum: number = 0;
+
+  totalPrice: number = 0;
+
+  extraChargeTotal: number = 0;
+
+  pensionName: string;
+
+  pensionAddress: string;
+
+  initalDate: Date;
+
+  dateDay;
+
+  checkDayNum: number;
+
   // set initial date as today date
-  constructor(calendar: NgbCalendar) {
+  constructor(calendar: NgbCalendar, private http: HttpClient, private activateRoute: ActivatedRoute, private router: Router) {
     this.selectedDate = calendar.getToday();
     this.getWeekDay(this.today);
     this.checkInDate = calendar.getToday();
+
+    activateRoute.params.subscribe(params => {
+      this.pensionPk = params['pk'];
+      this.initalDate = params['date'];
+    });
   }
 
   ngOnInit() {
-  }
+    // for nested array -> rooms in pension
+    this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${this.initalDate}/`)
+    .subscribe(pension => {
+      this.pensionPk = pension.pk;
+      this.pensionName = pension.name;
+      this.pensionAddress = pension.address[0];
+      this.rooms = pension['rooms'];
+
+      const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+      this.adultNum = checkedRoom.normal_num_poeple;
+
+      this.totalPrice = checkedRoom.price;
+  });
+}
 
   // --- Calendar Implementation Start ---
 
@@ -284,6 +396,9 @@ export class YapenReserveComponent implements OnInit {
   onDateSelection(date: NgbDateStruct) {
     this.selectedDate = date;
     this.checkInDate = date;
+    const calendarSelectedDate = `${date.year}-0${date.month}-${date.day}`; // 2018-08-20
+    this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${calendarSelectedDate}/`)
+      .subscribe(pension => this.rooms = pension.rooms);
   }
 
   // get weekday(요일) as string
@@ -309,5 +424,154 @@ export class YapenReserveComponent implements OnInit {
 
 
   // --- Calendar Implementation End ---
+
+
+  // --- Room Table Implementation Start ---
+
+  // make the room selected
+  changeRoom(selectedPk: number, selectStayNum: number, selectAdultNum: number, selectChildNum: number, selectBabyNum: number) {
+    this.checkedPk = selectedPk;
+    this.stayDayNum = selectStayNum;
+    this.adultNum = selectAdultNum;
+    this.childNum = selectChildNum;
+    this.babyNum = selectBabyNum;
+
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+    this.totalPrice = checkedRoom.price * this.stayDayNum;
+  }
+
+  // When selecting a period(1박)
+  selectPeriod(selectedStayNum: number) {
+    this.stayDayNum = selectedStayNum;
+
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+    this.totalPrice = checkedRoom.price * this.stayDayNum;
+  }
+
+  // show alert if the sum of adult, child, and baby is higher than the max number of the room selected
+  exceedAlert() {
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+    const totalNum = Number(this.adultNum) + Number(this.childNum) + Number(this.babyNum);
+
+    if (checkedRoom.max_num_people < totalNum) {
+      return window.alert(`최대인원 ${checkedRoom.max_num_people}보다 초과되었습니다. 다시 입력 바랍니다.`);
+    }
+  }
+
+  selectAdult(selectedAdultNum: number) {
+    this.adultNum = selectedAdultNum;
+    this.exceedAlert();
+
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+
+    if (selectedAdultNum > checkedRoom.normal_num_poeple) {
+      const _extraChargeAdult = (selectedAdultNum - checkedRoom.normal_num_poeple) * (checkedRoom.extra_charge_adult);
+      this.extraChargeTotal += _extraChargeAdult;
+    }
+  }
+
+  selectChild(selectedChildNum: number) {
+    this.childNum = selectedChildNum;
+    this.exceedAlert();
+
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+
+    if (selectedChildNum > 0) { // 3명 > 2명
+      const _extraChargeChild = (selectedChildNum) * (checkedRoom.extra_charge_child);
+      this.extraChargeTotal += _extraChargeChild;
+    }
+  }
+
+  selectBaby(selectedBabyNum: number) {
+    this.babyNum = selectedBabyNum;
+    this.exceedAlert();
+
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+
+    if (selectedBabyNum > 0) { // 3명 > 2명
+      const _extraChargeBaby = (selectedBabyNum) * (checkedRoom.extra_charge_baby);
+      this.extraChargeTotal += _extraChargeBaby;
+    }
+  }
+
+  roomStatusAlert() {
+    console.log('status');
+    if (this.stayDayNum > 1) {
+      this.checkDayNum = this.stayDayNum; // 3
+      this.dateDay = this.checkInDate.day;
+      this.getNextDay(this.dateDay);
+  } else {
+    this.postReserveRoom();
+  }
+}
+
+  getNextDay(day) {
+    const nextDay = day + 1; // +1 / +2
+    this.dateDay = nextDay;
+    const nextDayDate = `${this.checkInDate.year}-0${this.checkInDate.month}-${nextDay}`;
+    this.checkDayNum === 1 ? this.postReserveRoom() : this.findRoomStatus(nextDayDate);
+    this.checkDayNum = this.checkDayNum - 1;
+  }
+
+  findRoomStatus(eachDate) {
+    console.log('findRoomStatus');
+    this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${eachDate}/`)
+    .subscribe(pension => {
+      const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+      console.log(pension); // {pk: 1, name: "가평 폴라리스펜션[17.11월리모델링]", address: Array(1), rooms: Array(4)}
+      pension.rooms.forEach(room => {
+        if (checkedRoom.name === room.name) {
+          console.log(room.status);
+          if (!room.status) {
+            return window.alert('이미 다른분이 예약하셨습니다!');
+          } else {
+            console.log('true');
+            this.getNextDay(this.dateDay);
+          }
+        }
+      });
+    });
+  }
+
+  postReserveRoom() {
+    console.log('post');
+          // 1. post data to databse
+
+      // const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+      // console.log(checkedRoom);
+
+      // const finalCheckInDate = `${this.checkInDate.year}-${this.checkInDate.month}-${this.checkInDate.day}`;
+
+      // const newReserveRoom = {pk: checkedRoom.pk, checkin_date: finalCheckInDate, stay_day_num: this.stayDayNum,
+      //     adult_num: this.adultNum, child_num: this.childNum, baby_num: this.babyNum, total_price: this.totalPrice,
+      //     name: checkedRoom.name, size: checkedRoom.size, normal_num_poeple: checkedRoom.normal_num_poeple,
+      //     max_num_people: checkedRoom.max_num_people};
+      // console.log(newReserveRoom);
+      // this.http.post(this.urlInfo, newReserveRoom)
+      //   .subscribe(() => this.rooms = this.rooms);
+      // console.log(newReserveRoom);
+      //   alert('add!');
+
+      // 2. move to pay page
+      this.router.navigate(['pay']);
+    }
+
+  // add a room selected to reservation database
+  addReserveRoom() {
+    console.log('reserve');
+    // this.router.navigate(['pay']);
+    // 1. if checkedRoom.maxNumPeople < totalNum, then show alert!
+    const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+    const totalNum = Number(this.adultNum) + Number(this.childNum) + Number(this.babyNum);
+    console.log(totalNum);
+
+    if (checkedRoom.max_num_people < totalNum) {
+      return window.alert(`최대인원 ${checkedRoom.max_num_people}보다 초과되었습니다. 다시 입력 바랍니다.`);
+    } else {
+      this.roomStatusAlert();
+    }
+  }
+
+  // --- Room Table Implementation End ---
 
 }
