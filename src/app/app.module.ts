@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,13 +24,24 @@ import { YapenHeaderComponent } from './yapen-header.component';
 import { YapenFooterComponent } from './yapen-footer.component';
 import { YapenContainerComponent } from './yapen-container.component';
 
+import { LocalComponent } from './yapen-one/local/local.component';
+import { PeopleComponent } from './yapen-one/people/people.component';
+import { ThemeComponent } from './yapen-one/theme/theme.component';
+import { ConditionComponent } from './yapen-one/condition/condition.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { YapenRoomlistComponent } from './yapen-one/yapen-roomlist/yapen-roomlist.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SlideComponent } from './yapen-one/slide/slide.component';
+
+import { RangeDirective } from './range.directive';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: YapenContainerComponent},
   { path: 'pensionlist', component: YapenPensionlistComponent},
   { path: 'pensiondetail', component: YapenPensiondetailComponent},
-  { path: 'reserve', component: YapenReserveComponent},
+  { path: 'reserve/:pk/:date', component: YapenReserveComponent},
   { path: 'pay', component: YapenPayComponent},
   { path: 'payfinish', component: YapenPayfinishComponent},
   { path: 'login', component: YapenLoginComponent},
@@ -54,13 +66,22 @@ const routes: Routes = [
     YapenSignupComponent,
     YapenHeaderComponent,
     YapenFooterComponent,
-    YapenContainerComponent
+    YapenContainerComponent,
+
+    RangeDirective
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    LocalComponent,
+    PeopleComponent,
+    ThemeComponent,
+    ConditionComponent,
+    YapenRoomlistComponent,
+    SlideComponent,
+    BrowserAnimationsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(routes),
     LocalStorageModule.withConfig({

@@ -1,0 +1,36 @@
+.topLayer {
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 50px;
+  color: #1a0500;
+  font-size: 300%;
+  width: 1220px;
+  position: relative;
+}
+
+.pensiontext-1 {
+  position: relative;
+  color: #1a0500;
+}
+
+.pensiontext-2 {
+  position: relative;
+  color: #ff3300;
+}
+
+.searchbar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+
+.sbText {
+  display: block;
+  border: 5px solid #666699;
+  border-radius: 5px;
+  font-size: 100%;
+  margin: 50px auto;
+  width: 800px;
+  height: 60px;
+}
