@@ -32,7 +32,6 @@
     "mongoose": "^5.2.6",
     "@ng-bootstrap/ng-bootstrap": "^3.0.0",
     "bootstrap": "^4.0.0",
-    "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.2.2",
     "zone.js": "^0.8.26"
