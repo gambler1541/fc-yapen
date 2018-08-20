@@ -9,8 +9,8 @@ import { Component, OnInit } from '@angular/core';
     <!-- user info table -->
     <form>
       <section class="user-info">
+        <h2>예약자정보입력</h2>
         <table class="table table-bordered">
-          <caption>예약자정보입력</caption>
           <tbody>
 
             <!-- 예약자 이름 -->
@@ -49,8 +49,8 @@ import { Component, OnInit } from '@angular/core';
     <!-- 결제수단 선택 -->
     <div class="payments">
 
+      <h2>결제방법</h2>
       <table class="table table-bordered">
-        <caption>결제방법</caption>
         <tbody>
 
           <!-- 결제수단 선택 radio button -->
@@ -61,8 +61,11 @@ import { Component, OnInit } from '@angular/core';
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
-                      <input type="radio" aria-label="Radio button for following text input" checked> 신용카드
-                      <input type="radio" aria-label="Radio button for following text input"> 무통장입금
+                      <input type="radio" aria-label="Radio button for following text input" checked>
+                      <span class="input-credit">신용카드</span>
+                      <input type="radio" aria-label="Radio button for following text input"
+                        class="radio-nonbankbook">
+                      <span class="input-nonbankbook">무통장입금</span>
                         <!-- Add two forms depending on what is checked -->
                       <span></span>
                     </div>
@@ -74,11 +77,12 @@ import { Component, OnInit } from '@angular/core';
           <!-- 결제수단 선택 radio button -->
 
 
+          <!-- 신용카드 및 무통장입금 form -->
           <tr>
             <th scope="row"></th>
-            <td>
 
-              <!-- 신용카드 -->
+            <!-- 신용카드 -->
+            <td [style.display]="creditFormDisplay">
               <table class="table table-bordered">
                 <tbody>
                   <tr>
@@ -94,7 +98,7 @@ import { Component, OnInit } from '@angular/core';
                     <th scope="row">유효기간</th>
                     <td>
                       <div class="input-group mb-3">
-                        <select class="custom-select">
+                        <select class="credit-month">
                           <option selected>MM</option>
                           <option value="01">01</option>
                           <option value="02">02</option>
@@ -110,11 +114,8 @@ import { Component, OnInit } from '@angular/core';
                           <option value="12">12</option>
                         </select>
                         /
-                        <select class="custom-select">
+                        <select class="credit-year">
                           <option selected>YY</option>
-                          <option value="15">15</option>
-                          <option value="16">16</option>
-                          <option value="17">17</option>
                           <option value="18">18</option>
                           <option value="19">19</option>
                           <option value="20">20</option>
@@ -139,8 +140,11 @@ import { Component, OnInit } from '@angular/core';
                     <th scope="row">카드구분</th>
                     <td>
                       <div class="input-group-text">
-                        <input type="radio" aria-label="Radio button for following text input" checked> 개인
-                        <input type="radio" aria-label="Radio button for following text input"> 법인
+                        <input type="radio" aria-label="Radio button for following text input" checked>
+                        <span class="card-type-person">개인</span>
+                        <input type="radio" aria-label="Radio button for following text input"
+                          class="radio-corporation">
+                        <span class="card-type-corporation">법인</span>
                       </div>
                     </td>
                   </tr>
@@ -180,36 +184,40 @@ import { Component, OnInit } from '@angular/core';
                 </tbody>
               </table>
             </td>
+            <!-- 신용카드 -->
+
+            <!-- 무통장입금 -->
+            <td [style.display]="nonBankBookDisplay">
+              <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <th scope="row" style="text-align: center;">입금은행</th>
+                  <td>
+                    <select class="custom-select">
+                      <option value="01" selected>선택</option>
+                      <option value="02">기업은행</option>
+                      <option value="03">국민은행</option>
+                      <option value="04">외환은행</option>
+                      <option value="05">우리은행</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" style="text-align: center;">입금자명</th>
+                  <td>
+                    <input type="text" placeholder="홍길동">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+            </td>
+            <!-- 무통장입금 -->
+
           </tr>
+          <!-- 신용카드 및 무통장입금 form -->
 
         </tbody>
       </table>
-      <!-- 신용카드 -->
-
-      <!-- 무통장입금 -->
-      <table class="table table-bordered">
-      <tbody>
-        <tr>
-          <th scope="row" style="text-align: center;">입금은행</th>
-          <td>
-            <select class="custom-select">
-              <option value="01" selected>선택</option>
-              <option value="02">기업은행</option>
-              <option value="03">국민은행</option>
-              <option value="04">외환은행</option>
-              <option value="05">우리은행</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" style="text-align: center;">입금자명</th>
-          <td>
-            <input type="text" placeholder="홍길동">
-          </td>
-        </tr>
-      </tbody>
-      </table>
-      <!-- 무통장입금 -->
 
     </div>
     <!-- 결제수단 선택 -->
@@ -225,11 +233,90 @@ import { Component, OnInit } from '@angular/core';
   </div>
   <!-- yapen pay page -->
   `,
-  styles: []
+  styles: [`
+    .pay-page{
+      margin: 20px 10px 20px 10px;
+    }
+    .pay-page table th{
+      background: #f7f7f7;
+    }
+    .user-info{
+      margin-bottom: 30px;
+    }
+    .help{
+      margin-left: 7px;
+      font-size: 11px;
+      color: #b2b2b2;
+    }
+    h2{
+      font-size: 16px;
+      color: #ff6559;
+      font-weight: bold;
+    }
+    .input-group-text{
+      background-color: white;
+      border: white;
+    }
+    .radio-nonbankbook{
+      margin-left: 10px;
+    }
+    .input-credit{
+      margin-left: 10px;
+    }
+    .input-nonbankbook{
+      margin-left: 10px;
+    }
+    .credit-month{
+      margin-right: 10px;
+    }
+    .credit-year{
+      margin-left: 10px;
+    }
+    .card-type-person{
+      margin-left: 10px;
+    }
+    .card-type-corporation{
+      margin-left: 10px;
+    }
+    .radio-corporation{
+      margin-left: 10px;
+    }
+    select{
+      width: 185px;
+    }
+    td .table th{
+      text-align: center;
+    }
+    .installment-help{
+      margin-top: 5px;
+    }
+    .email-help{
+      margin-top: 5px;
+    }
+    .pay-btn{
+      text-align: center;
+    }
+    .pay-btn button{
+      width: 258px;
+      height: 37px;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 14px;
+      background: #ff6559;
+      color: #fff;
+      border-color: white;
+    }
+  `]
 })
 export class YapenPayComponent implements OnInit {
 
-  constructor() { }
+  creditFormDisplay: string;
+  nonBankBookDisplay: string;
+
+  constructor() {
+    this.creditFormDisplay = 'block';
+    this.nonBankBookDisplay = 'none';
+   }
 
   ngOnInit() {
   }
