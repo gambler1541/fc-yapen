@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-yapen-pay',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
     <div class="pay-page">
 
     <!-- user info table -->
-    <form>
+    <form [formGroup]="userForm" novalidate>
       <section class="user-info">
         <h2>예약자정보입력</h2>
         <table class="table table-bordered">
@@ -18,7 +20,8 @@ import { Component, OnInit } from '@angular/core';
               <th scope="row">예약자 이름</th>
               <td>
                 <span>
-                  <input type="text">
+                  <input type="text" formControlName="userName"
+                    [style.border-color]="(isEmptyName ? 'rgb(255, 101, 89)' : '')">
                   <span class="help">예) 홍길동</span>
                 </span>
               </td>
@@ -30,8 +33,10 @@ import { Component, OnInit } from '@angular/core';
               <th scope="row">휴대폰번호</th>
               <td>
                 <span>
-                  <input type="text">
-                    <span class="empty-phone-number">
+                  <input type="text" formControlName="userPhone"
+                    [style.border-color]="(isEmptyPhone ? 'rgb(255, 101, 89)' : '')" #userphone>
+                    <span class="empty-phone-number" *ngIf="isEmptyPhone">
+                      {{ !userphone.value ? '휴대폰번호가 입력되지 않았습니다.' :  '휴대폰번호가 정확히 입력되지 않았습니다.' }}
                     </span>
                   <span class="help">예) 0101234567</span>
                 </span>
@@ -225,9 +230,10 @@ import { Component, OnInit } from '@angular/core';
 
     <!-- pay button -->
     <div class="pay-btn">
-      <button type="submit" class="btn btn-primary btn-lg">결제하기</button>
+      <button type="submit" class="btn btn-primary btn-lg"
+      (click)="userName.errors ? (userPhone.errors ? isDoubleEmpty() : isEmptyName = true) :
+      (userPhone.errors ? isEmptyPhone = true : moveToFinishPage())">결제하기</button>
     </div>
-    <a routerLink="/payfinish">payfinish</a>
     <!-- pay button -->
 
   </div>
@@ -239,6 +245,9 @@ import { Component, OnInit } from '@angular/core';
     }
     .pay-page table th{
       background: #f7f7f7;
+    }
+    .pay-page input[type="text"], [type="password"]{
+      border: 2px solid #dedede;
     }
     .user-info{
       margin-bottom: 30px;
@@ -252,6 +261,14 @@ import { Component, OnInit } from '@angular/core';
       font-size: 16px;
       color: #ff6559;
       font-weight: bold;
+    }
+    .empty-phone-number{
+      color: #FF6559;
+      font-weight: 800;
+      border: 1px solid #FF6559;
+      border-color: rgb(255, 101, 89);
+      border-radius: 5px 5px;
+      margin-left: 5px;
     }
     .input-group-text{
       background-color: white;
@@ -313,12 +330,48 @@ export class YapenPayComponent implements OnInit {
   creditFormDisplay: string;
   nonBankBookDisplay: string;
 
-  constructor() {
+  userForm: FormGroup;
+
+  isEmptyName = false;
+  isEmptyPhone = false;
+
+  constructor(private fb: FormBuilder, private router: Router) {
     this.creditFormDisplay = 'block';
     this.nonBankBookDisplay = 'none';
    }
 
   ngOnInit() {
+    this.userForm = this.fb.group({
+      userName: ['', Validators.required],
+      userPhone: ['', [
+        Validators.required,
+        Validators.pattern('[0-9]{11}')
+      ]]
+    });
   }
+
+    // -- user-info form implementation start --
+
+    get userPhone() {
+      return this.userForm.get('userPhone');
+    }
+
+    get userName() {
+      return this.userForm.get('userName');
+    }
+
+    isDoubleEmpty() {
+      this.isEmptyName = true;
+      this.isEmptyPhone = true;
+    }
+
+    // -- user-info form implementation end --
+
+
+    moveToFinishPage() {
+      console.log('move');
+      this.router.navigate(['payfinish']);
+    }
+
 
 }
