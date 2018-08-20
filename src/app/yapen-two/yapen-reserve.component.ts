@@ -336,21 +336,21 @@ export class YapenReserveComponent implements OnInit {
 
   urlDate = 'https://www.pmb.kr/reservation';
 
-  urlInfo: 'https://www.pmb.kr/reservation/info';
+  urlInfo = 'https://www.pmb.kr/reservation/info/';
 
-  checkedPk: number = 1;
+  checkedPk = 1;
 
-  stayDayNum: number = 1;
+  stayDayNum = 1;
 
   adultNum: number;
 
-  childNum: number = 0;
+  childNum = 0;
 
-  babyNum: number = 0;
+  babyNum = 0;
 
-  totalPrice: number = 0;
+  totalPrice = 0;
 
-  extraChargeTotal: number = 0;
+  extraChargeTotal = 0;
 
   pensionName: string;
 
@@ -514,7 +514,6 @@ export class YapenReserveComponent implements OnInit {
   }
 
   findRoomStatus(eachDate) {
-    console.log('findRoomStatus');
     this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${eachDate}/`)
     .subscribe(pension => {
       const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
@@ -525,7 +524,6 @@ export class YapenReserveComponent implements OnInit {
           if (!room.status) {
             return window.alert('이미 다른분이 예약하셨습니다!');
           } else {
-            console.log('true');
             this.getNextDay(this.dateDay);
           }
         }
@@ -534,36 +532,39 @@ export class YapenReserveComponent implements OnInit {
   }
 
   postReserveRoom() {
-    console.log('post');
-          // 1. post data to databse
+      const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+      const finalCheckInDate = `${this.checkInDate.year}-${this.checkInDate.month}-${this.checkInDate.day}`;
 
-      // const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
-      // console.log(checkedRoom);
+      const newReserveRoom = {
+        pk: checkedRoom.pk,
+        checkin_date: finalCheckInDate,
+        stay_day_num: this.stayDayNum,
+        adult_num: this.adultNum,
+        child_num: this.childNum,
+        baby_num: this.babyNum,
+        total_price: this.totalPrice,
+        name: checkedRoom.name,
+        size: checkedRoom.size,
+        normal_num_poeple: checkedRoom.normal_num_poeple,
+        max_num_people: checkedRoom.max_num_people
+      };
 
-      // const finalCheckInDate = `${this.checkInDate.year}-${this.checkInDate.month}-${this.checkInDate.day}`;
-
-      // const newReserveRoom = {pk: checkedRoom.pk, checkin_date: finalCheckInDate, stay_day_num: this.stayDayNum,
-      //     adult_num: this.adultNum, child_num: this.childNum, baby_num: this.babyNum, total_price: this.totalPrice,
-      //     name: checkedRoom.name, size: checkedRoom.size, normal_num_poeple: checkedRoom.normal_num_poeple,
-      //     max_num_people: checkedRoom.max_num_people};
-      // console.log(newReserveRoom);
-      // this.http.post(this.urlInfo, newReserveRoom)
-      //   .subscribe(() => this.rooms = this.rooms);
-      // console.log(newReserveRoom);
-      //   alert('add!');
-
-      // 2. move to pay page
-      this.router.navigate(['pay']);
+      this.http.post(this.urlInfo, newReserveRoom)
+        .subscribe(
+          () => {
+            alert('예약이 성공했습니다.');
+            this.router.navigate(['pay']);
+          },
+          error => {
+            alert('예약이 실패되었습니다.');
+          }
+        );
     }
 
   // add a room selected to reservation database
   addReserveRoom() {
-    console.log('reserve');
-    // this.router.navigate(['pay']);
-    // 1. if checkedRoom.maxNumPeople < totalNum, then show alert!
     const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
     const totalNum = Number(this.adultNum) + Number(this.childNum) + Number(this.babyNum);
-    console.log(totalNum);
 
     if (checkedRoom.max_num_people < totalNum) {
       return window.alert(`최대인원 ${checkedRoom.max_num_people}보다 초과되었습니다. 다시 입력 바랍니다.`);
