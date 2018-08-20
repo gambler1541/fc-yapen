@@ -66,9 +66,13 @@ import { Router } from '@angular/router';
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
-                      <input type="radio" aria-label="Radio button for following text input" checked>
+                      <input type="radio" aria-label="Radio button for following text input"
+                        (change)="changeToCredit()"
+                        [checked]="isCredet" #creditInput>
                       <span class="input-credit">신용카드</span>
                       <input type="radio" aria-label="Radio button for following text input"
+                        (change)="changeToNoBankbook()"
+                        [checked]="isNoBankbook"
                         class="radio-nonbankbook">
                       <span class="input-nonbankbook">무통장입금</span>
                         <!-- Add two forms depending on what is checked -->
@@ -87,135 +91,139 @@ import { Router } from '@angular/router';
             <th scope="row"></th>
 
             <!-- 신용카드 -->
-            <td [style.display]="creditFormDisplay">
-              <table class="table table-bordered">
-                <tbody>
+            <form action="" [style.display]="creditFormDisplay">
+              <section class="credit-card-form">
+                <table class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <th scope="row">카드번호</th>
+                      <td>
+                        <input type="text"> -
+                        <input type="text"> -
+                        <input type="text"> -
+                        <input type="text">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">유효기간</th>
+                      <td>
+                        <div class="input-group mb-3">
+                          <select class="credit-month">
+                            <option selected>MM</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                          </select>
+                          /
+                          <select class="credit-year">
+                            <option selected>YY</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">비밀번호</th>
+                      <td>
+                        <input type="password" placeholder="비밀번호 앞 2자리">
+                        ●●
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">카드구분</th>
+                      <td>
+                        <div class="input-group-text">
+                          <input type="radio" aria-label="Radio button for following text input" checked>
+                          <span class="card-type-person">개인</span>
+                          <input type="radio" aria-label="Radio button for following text input"
+                            class="radio-corporation">
+                          <span class="card-type-corporation">법인</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">생년월일</th>
+                      <td>
+                        <input type="text" placeholder="생년월일 6자리">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">할부선택</th>
+                      <td>
+                        <select class="custom-select">
+                          <option value="01" selected>일시불</option>
+                          <option value="02">2개월</option>
+                          <option value="03">3개월</option>
+                          <option value="04">4개월</option>
+                          <option value="05">5개월</option>
+                          <option value="06">6개월</option>
+                          <option value="07">7개월</option>
+                          <option value="08">8개월</option>
+                          <option value="09">9개월</option>
+                          <option value="10">10개월</option>
+                          <option value="11">11개월</option>
+                          <option value="12">12개월</option>
+                        </select>
+                        <p class="installment-help">* 5만원 미만, 법인카드는 할부적용 불가</p>
+                      </td>
+                    </tr>
                   <tr>
-                    <th scope="row">카드번호</th>
+                    <th scope="row">이메일</th>
                     <td>
-                      <input type="text"> -
-                      <input type="text"> -
-                      <input type="text"> -
                       <input type="text">
+                      <p class="email-help">* 입력하신 이메일 주소로 결제 내역이 발송됩니다.</p>
                     </td>
                   </tr>
-                  <tr>
-                    <th scope="row">유효기간</th>
-                    <td>
-                      <div class="input-group mb-3">
-                        <select class="credit-month">
-                          <option selected>MM</option>
-                          <option value="01">01</option>
-                          <option value="02">02</option>
-                          <option value="03">03</option>
-                          <option value="04">04</option>
-                          <option value="05">05</option>
-                          <option value="06">06</option>
-                          <option value="07">07</option>
-                          <option value="08">08</option>
-                          <option value="09">09</option>
-                          <option value="10">10</option>
-                          <option value="11">11</option>
-                          <option value="12">12</option>
-                        </select>
-                        /
-                        <select class="credit-year">
-                          <option selected>YY</option>
-                          <option value="18">18</option>
-                          <option value="19">19</option>
-                          <option value="20">20</option>
-                          <option value="21">21</option>
-                          <option value="22">22</option>
-                          <option value="23">23</option>
-                          <option value="24">24</option>
-                          <option value="25">25</option>
-                          <option value="26">26</option>
-                        </select>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">비밀번호</th>
-                    <td>
-                      <input type="password" placeholder="비밀번호 앞 2자리">
-                      ●●
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">카드구분</th>
-                    <td>
-                      <div class="input-group-text">
-                        <input type="radio" aria-label="Radio button for following text input" checked>
-                        <span class="card-type-person">개인</span>
-                        <input type="radio" aria-label="Radio button for following text input"
-                          class="radio-corporation">
-                        <span class="card-type-corporation">법인</span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">생년월일</th>
-                    <td>
-                      <input type="text" placeholder="생년월일 6자리">
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">할부선택</th>
-                    <td>
-                      <select class="custom-select">
-                        <option value="01" selected>일시불</option>
-                        <option value="02">2개월</option>
-                        <option value="03">3개월</option>
-                        <option value="04">4개월</option>
-                        <option value="05">5개월</option>
-                        <option value="06">6개월</option>
-                        <option value="07">7개월</option>
-                        <option value="08">8개월</option>
-                        <option value="09">9개월</option>
-                        <option value="10">10개월</option>
-                        <option value="11">11개월</option>
-                        <option value="12">12개월</option>
-                      </select>
-                      <p class="installment-help">* 5만원 미만, 법인카드는 할부적용 불가</p>
-                    </td>
-                  </tr>
-                <tr>
-                  <th scope="row">이메일</th>
-                  <td>
-                    <input type="text">
-                    <p class="email-help">* 입력하신 이메일 주소로 결제 내역이 발송됩니다.</p>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </td>
+                  </tbody>
+                  </table>
+                </section>
+              </form>
             <!-- 신용카드 -->
 
             <!-- 무통장입금 -->
-            <td [style.display]="nonBankBookDisplay">
-              <table class="table table-bordered">
-              <tbody>
-                <tr>
-                  <th scope="row" style="text-align: center;">입금은행</th>
-                  <td>
-                    <select class="custom-select">
-                      <option value="01" selected>선택</option>
-                      <option value="02">기업은행</option>
-                      <option value="03">국민은행</option>
-                      <option value="04">외환은행</option>
-                      <option value="05">우리은행</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" style="text-align: center;">입금자명</th>
-                  <td>
-                    <input type="text" placeholder="홍길동">
-                  </td>
-                </tr>
-              </tbody>
-              </table>
-            </td>
+            <form action="" [style.display]="nonBankBookDisplay">
+              <section class="non-bankbook-form">
+                <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th scope="row" style="text-align: center;">입금은행</th>
+                    <td>
+                      <select class="custom-select">
+                        <option value="01" selected>선택</option>
+                        <option value="02">기업은행</option>
+                        <option value="03">국민은행</option>
+                        <option value="04">외환은행</option>
+                        <option value="05">우리은행</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" style="text-align: center;">입금자명</th>
+                    <td>
+                      <input type="text" placeholder="홍길동">
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+              </section>
+            </form>
             <!-- 무통장입금 -->
 
           </tr>
@@ -283,6 +291,9 @@ import { Router } from '@angular/router';
     .input-nonbankbook{
       margin-left: 10px;
     }
+    .credit-form{
+      margin: 20px 20px 20px 20px;
+    }
     .credit-month{
       margin-right: 10px;
     }
@@ -335,6 +346,9 @@ export class YapenPayComponent implements OnInit {
   isEmptyName = false;
   isEmptyPhone = false;
 
+  isCredet = true;
+  isNoBankbook = false;
+
   constructor(private fb: FormBuilder, private router: Router) {
     this.creditFormDisplay = 'block';
     this.nonBankBookDisplay = 'none';
@@ -366,6 +380,25 @@ export class YapenPayComponent implements OnInit {
     }
 
     // -- user-info form implementation end --
+
+
+    // -- form-change button implementation start --
+
+    changeToNoBankbook() {
+      this.isNoBankbook = true;
+      this.isCredet = false;
+      this.nonBankBookDisplay = 'inline';
+      this.creditFormDisplay = 'none';
+    }
+
+    changeToCredit() {
+      this.isCredet = true;
+      this.isNoBankbook = false;
+      this.creditFormDisplay = 'inline';
+      this.nonBankBookDisplay = 'none';
+    }
+
+    // -- form-change button implementation end --
 
 
     moveToFinishPage() {
