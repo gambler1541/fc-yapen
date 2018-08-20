@@ -1,8 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound.component';
@@ -20,6 +22,7 @@ import { YapenSignupComponent } from './yapen-three/yapen-signup.component';
 import { YapenHeaderComponent } from './yapen-header.component';
 import { YapenFooterComponent } from './yapen-footer.component';
 import { YapenContainerComponent } from './yapen-container.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -54,8 +57,16 @@ const routes: Routes = [
     YapenContainerComponent
   ],
   imports: [
-    BrowserModule, FormsModule, HttpClientModule,
-    RouterModule.forRoot(routes)
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgbModule.forRoot(),
+    RouterModule.forRoot(routes),
+    LocalStorageModule.withConfig({
+      prefix: 'yapen',
+      storageType: 'localStorage'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
