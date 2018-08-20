@@ -68,6 +68,8 @@ ul {
   float: left;
   width: 15px;
   height: 15px;
+  margin-top: 5px;
+  margin-right: 3px;
 }
 
 .revThemeLayer .revThemeTbl td ul li label {
