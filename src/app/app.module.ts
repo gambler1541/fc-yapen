@@ -28,12 +28,8 @@ import { LocalComponent } from './yapen-one/local/local.component';
 import { PeopleComponent } from './yapen-one/people/people.component';
 import { ThemeComponent } from './yapen-one/theme/theme.component';
 import { ConditionComponent } from './yapen-one/condition/condition.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { YapenRoomlistComponent } from './yapen-one/yapen-roomlist/yapen-roomlist.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SlideComponent } from './yapen-one/slide/slide.component';
-
 import { RangeDirective } from './range.directive';
 
 const routes: Routes = [
@@ -67,20 +63,20 @@ const routes: Routes = [
     YapenHeaderComponent,
     YapenFooterComponent,
     YapenContainerComponent,
-
-    RangeDirective
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
+    RangeDirective,
     LocalComponent,
     PeopleComponent,
     ThemeComponent,
     ConditionComponent,
     YapenRoomlistComponent,
     SlideComponent,
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+
     BrowserAnimationsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(routes),
