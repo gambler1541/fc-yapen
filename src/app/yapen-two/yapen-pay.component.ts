@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-yapen-pay',
@@ -21,7 +22,7 @@ import { Router } from '@angular/router';
               <td>
                 <span>
                   <input type="text" formControlName="userName"
-                    [style.border-color]="(isEmptyName ? 'rgb(255, 101, 89)' : '')">
+                    [style.border-color]="(isEmptyName ? 'rgb(255, 101, 89)' : '')" #inputUserName>
                   <span class="help">예) 홍길동</span>
                 </span>
               </td>
@@ -69,7 +70,7 @@ import { Router } from '@angular/router';
                       <input type="radio" aria-label="Radio button for following text input"
                         (change)="changeToCredit()"
                         [checked]="isCredet" #creditInput>
-                      <span class="input-credit">신용카드</span>
+                      <span class="input-credit">카드간편결제</span>
                       <input type="radio" aria-label="Radio button for following text input"
                         (change)="changeToNoBankbook()"
                         [checked]="isNoBankbook"
@@ -91,24 +92,25 @@ import { Router } from '@angular/router';
             <th scope="row"></th>
 
             <!-- 신용카드 -->
-            <form action="" [style.display]="creditFormDisplay">
+            <form [formGroup]="creditCardForm" [style.display]="creditFormDisplay" novalidate>
               <section class="credit-card-form">
                 <table class="table table-bordered">
                   <tbody>
                     <tr>
                       <th scope="row">카드번호</th>
                       <td>
-                        <input type="text"> -
-                        <input type="text"> -
-                        <input type="text"> -
-                        <input type="text">
+                        <input type="text" formControlName="cardNumber1"> -
+                        <input type="text" formControlName="cardNumber2"> -
+                        <input type="text" formControlName="cardNumber3"> -
+                        <input type="text" formControlName="cardNumber4">
                       </td>
                     </tr>
                     <tr>
                       <th scope="row">유효기간</th>
                       <td>
                         <div class="input-group mb-3">
-                          <select class="credit-month">
+                          <select class="credit-month"
+                            (change)="checkCreditMonth($event.target.value)">
                             <option selected>MM</option>
                             <option value="01">01</option>
                             <option value="02">02</option>
@@ -124,7 +126,8 @@ import { Router } from '@angular/router';
                             <option value="12">12</option>
                           </select>
                           /
-                          <select class="credit-year">
+                          <select class="credit-year"
+                            (change)="checkCreditYear($event.target.value)">
                             <option selected>YY</option>
                             <option value="18">18</option>
                             <option value="19">19</option>
@@ -142,7 +145,7 @@ import { Router } from '@angular/router';
                     <tr>
                       <th scope="row">비밀번호</th>
                       <td>
-                        <input type="password" placeholder="비밀번호 앞 2자리">
+                        <input type="password" placeholder="비밀번호 앞 2자리" formControlName="cardPassword">
                         ●●
                       </td>
                     </tr>
@@ -150,9 +153,13 @@ import { Router } from '@angular/router';
                       <th scope="row">카드구분</th>
                       <td>
                         <div class="input-group-text">
-                          <input type="radio" aria-label="Radio button for following text input" checked>
+                          <input type="radio" aria-label="Radio button for following text input"
+                            (change)="changeToPerson()"
+                            [checked]="isPerson">
                           <span class="card-type-person">개인</span>
                           <input type="radio" aria-label="Radio button for following text input"
+                            (change)="changeToCorporation()"
+                            [checked]="isCorporation"
                             class="radio-corporation">
                           <span class="card-type-corporation">법인</span>
                         </div>
@@ -161,13 +168,14 @@ import { Router } from '@angular/router';
                     <tr>
                       <th scope="row">생년월일</th>
                       <td>
-                        <input type="text" placeholder="생년월일 6자리">
+                        <input type="text" placeholder="생년월일 6자리" formControlName="birthday">
                       </td>
                     </tr>
                     <tr>
                       <th scope="row">할부선택</th>
                       <td>
-                        <select class="custom-select">
+                        <select class="custom-select"
+                          (change)="checkCreditInstallment($event.target.value)">
                           <option value="01" selected>일시불</option>
                           <option value="02">2개월</option>
                           <option value="03">3개월</option>
@@ -187,7 +195,7 @@ import { Router } from '@angular/router';
                   <tr>
                     <th scope="row">이메일</th>
                     <td>
-                      <input type="text">
+                      <input type="text" formControlName="email">
                       <p class="email-help">* 입력하신 이메일 주소로 결제 내역이 발송됩니다.</p>
                     </td>
                   </tr>
@@ -240,7 +248,7 @@ import { Router } from '@angular/router';
     <div class="pay-btn">
       <button type="submit" class="btn btn-primary btn-lg"
       (click)="userName.errors ? (userPhone.errors ? isDoubleEmpty() : isEmptyName = true) :
-      (userPhone.errors ? isEmptyPhone = true : moveToFinishPage())">결제하기</button>
+      (userPhone.errors ? isEmptyPhone = true : checkCardNumber())">결제하기</button>
     </div>
     <!-- pay button -->
 
@@ -342,6 +350,7 @@ export class YapenPayComponent implements OnInit {
   nonBankBookDisplay: string;
 
   userForm: FormGroup;
+  creditCardForm: FormGroup;
 
   isEmptyName = false;
   isEmptyPhone = false;
@@ -349,7 +358,17 @@ export class YapenPayComponent implements OnInit {
   isCredet = true;
   isNoBankbook = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  creditMonth = 'MM';
+  credityear = 'YY';
+
+  isPerson = true;
+  isCorporation = false;
+
+  installment = '일시불';
+
+  urlPay = 'https://www.pmb.kr/reservation/pay/​';
+
+  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {
     this.creditFormDisplay = 'block';
     this.nonBankBookDisplay = 'none';
    }
@@ -362,7 +381,47 @@ export class YapenPayComponent implements OnInit {
         Validators.pattern('[0-9]{11}')
       ]]
     });
+
+    this.creditCardForm = this.fb.group({
+
+        cardNumber1: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{4}')
+        ]],
+
+        cardNumber2: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{4}')
+        ]],
+
+        cardNumber3: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{4}')
+        ]],
+
+        cardNumber4: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{4}')
+        ]],
+
+        cardPassword: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{2}')
+        ]],
+
+        birthday: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{6}')
+        ]],
+
+        email: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/)
+        ]]
+
+    });
   }
+
 
     // -- user-info form implementation start --
 
@@ -382,6 +441,7 @@ export class YapenPayComponent implements OnInit {
     // -- user-info form implementation end --
 
 
+
     // -- form-change button implementation start --
 
     changeToNoBankbook() {
@@ -399,6 +459,89 @@ export class YapenPayComponent implements OnInit {
     }
 
     // -- form-change button implementation end --
+
+
+
+    // -- credit-card form implementation start --
+
+    get cardNumber1() {
+      return this.creditCardForm.get('cardNumber1');
+    }
+
+    get cardNumber2() {
+      return this.creditCardForm.get('cardNumber2');
+    }
+
+    get cardNumber3() {
+      return this.creditCardForm.get('cardNumber3');
+    }
+
+    get cardNumber4() {
+      return this.creditCardForm.get('cardNumber4');
+    }
+
+    get cardPassword() {
+      return this.creditCardForm.get('cardPassword');
+    }
+
+    get birthday() {
+      return this.creditCardForm.get('birthday');
+    }
+
+    get email() {
+      return this.creditCardForm.get('email');
+    }
+
+    checkCardNumber() {
+      this.cardNumber1.errors ? alert('카드번호를 정확하게 입력해 주시기 바랍니다.') :
+      this.cardNumber2.errors ? alert('카드번호를 정확하게 입력해 주시기 바랍니다.') :
+      this.cardNumber3.errors ? alert('카드번호를 정확하게 입력해 주시기 바랍니다.') :
+      this.cardNumber4.errors ? alert('카드번호를 정확하게 입력해 주시기 바랍니다.') :
+      this.checkValidPeriod();
+    }
+
+    checkValidPeriod() {
+      this.creditMonth === 'MM' ? alert('유효기간을 정확하게 입력해 주시기 바랍니다.') :
+      this.credityear === 'YY' ? alert('유효기간을 정확하게 입력해 주시기 바랍니다.') :
+      this.checkCardPassword();
+    }
+
+    checkCreditMonth(month: string) {
+      this.creditMonth = month;
+    }
+
+    checkCreditYear(year: string) {
+      this.credityear = year;
+    }
+
+    checkCardPassword() {
+      this.cardPassword.errors ? alert('비밀번호를 정확하게 입력해 주시기 바랍니다.') : this.checkBirthday();
+    }
+
+    changeToCorporation() {
+      this.isCorporation = true;
+      this.isPerson = false;
+    }
+
+    changeToPerson() {
+      this.isPerson = true;
+      this.isCorporation = false;
+    }
+
+    checkBirthday() {
+      this.birthday.errors ? alert('생년월일을 정확하게 입력해 주시기 바랍니다.') : this.checkEmail();
+    }
+
+    checkCreditInstallment(installmentValue: string) {
+      this.installment = installmentValue;
+    }
+
+    checkEmail() {
+      this.email.errors ? alert('이메일을 정확하게 입력해 주시기 바랍니다.') : alert('no errors');
+    }
+
+
+    // -- credit-card form implementation end --
 
 
     moveToFinishPage() {
