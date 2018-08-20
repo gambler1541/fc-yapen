@@ -1,0 +1,25 @@
+.slideWrapper {
+  float: left;
+  width: 750px;
+  height: 304px;
+}
+.slideWrapper img {
+  width: 100%;
+}
+
+.imgWrapper {
+  float: right;
+  width: 446px;
+  height: 304px;
+}
+
+.sliders {
+  padding: 0px 24px;
+}
+.sliders:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+
