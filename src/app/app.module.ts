@@ -76,7 +76,6 @@ const routes: Routes = [
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-
     BrowserAnimationsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(routes),
