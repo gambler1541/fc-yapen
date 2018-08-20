@@ -22,13 +22,13 @@ import { forEach } from '@angular/router/src/utils/collection';
       <tr *ngFor="let locations of res; let i = index;">
           <th>
             <label style="margin-left: 15px;">
-              "{{ res[i].name }}"
-              <span>({{ res[i].pensions_length }})</span>
+              "{{ locations.name }}"
+              <span>({{ locations.pensions_length }})</span>
             </label>
           </th>
           <td>
             <ul *ngFor="let subLocation of location[i]; let j = index;">
-              <li data-id="{{ location[i][j].sub_location_no }}" (click)="changeArea.emit(location[i][j].name)">
+              <li (click)="changeArea.emit(location[i][j])">
                 "{{ location[i][j].name }}"
                 <span>({{ location[i][j].pensions_length }})</span>
               </li>
@@ -80,7 +80,7 @@ export class LocalComponent implements OnInit {
           res.filter((pension, i) => {
             if ( pension.name === '가평' || pension.name === '경기') {
                 this.location.push(pension.sublocations);
-                // console.log(this.location);
+                console.log(this.location);
           }
       });
     });
