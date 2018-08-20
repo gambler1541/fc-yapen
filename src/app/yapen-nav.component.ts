@@ -51,6 +51,4 @@ export class YapenNavComponent implements OnInit {
       this.stateviewService.pensionList = res;
     });
   }
-
-
 }
