@@ -12,6 +12,7 @@ interface Area {
   <app-condition [res]="res" [resid]="resid" [people]="people"></app-condition>
   <app-local (changeArea)="changeArea($event)"></app-local>
   <app-people (changePeople)="changePeople($event)" [peoplePercent]="peoplePercent"></app-people>
+  <app-searchcalendar></app-searchcalendar>
   <app-theme></app-theme>
   <!-- 클릭 후 서치바 추가하기. -->
   <!-- 달력 넣기-->
