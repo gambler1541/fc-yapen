@@ -176,18 +176,18 @@ import { HttpClient } from '@angular/common/http';
                       <td>
                         <select class="custom-select"
                           (change)="checkCreditInstallment($event.target.value)">
-                          <option value="01" selected>일시불</option>
-                          <option value="02">2개월</option>
-                          <option value="03">3개월</option>
-                          <option value="04">4개월</option>
-                          <option value="05">5개월</option>
-                          <option value="06">6개월</option>
-                          <option value="07">7개월</option>
-                          <option value="08">8개월</option>
-                          <option value="09">9개월</option>
-                          <option value="10">10개월</option>
-                          <option value="11">11개월</option>
-                          <option value="12">12개월</option>
+                          <option value="일시불" selected>일시불</option>
+                          <option value="2개월">2개월</option>
+                          <option value="3개월">3개월</option>
+                          <option value="4개월">4개월</option>
+                          <option value="5개월">5개월</option>
+                          <option value="6개월">6개월</option>
+                          <option value="7개월">7개월</option>
+                          <option value="8개월">8개월</option>
+                          <option value="9개월">9개월</option>
+                          <option value="10개월">10개월</option>
+                          <option value="11개월">11개월</option>
+                          <option value="12개월">12개월</option>
                         </select>
                         <p class="installment-help">* 5만원 미만, 법인카드는 할부적용 불가</p>
                       </td>
@@ -363,7 +363,7 @@ export class YapenPayComponent implements OnInit {
   isNoBankbook = false;
 
   creditMonth = 'MM';
-  credityear = 'YY';
+  creditYear = 'YY';
 
   isPerson = true;
   isCorporation = false;
@@ -377,7 +377,26 @@ export class YapenPayComponent implements OnInit {
   depositBank = '선택';
   isEmptyDepositName = false;
 
-  urlPay = 'https://www.pmb.kr/reservation/pay/​';
+  payType = '카드간편결제';
+  creditCardNumber;
+  creditCardPassword;
+  cardType = '개인';
+  owernerBirthday;
+  owernerEmail;
+
+  depositorName;
+
+  urlPay = '​https://api.pmb.kr/reservation/pay/​';
+
+  urlInfo = 'https://api.pmb.kr/reservation/info/';
+
+  // urlError = 'https://www.pmb.kr/reservation/​';
+
+  reserveRooms;
+  reserveRoomPk;
+  reserveRoomCheckInDate;
+  reserveRoomStayDayNum;
+  reserveRoomTotalPrice;
 
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {
     this.creditFormDisplay = 'block';
@@ -385,6 +404,16 @@ export class YapenPayComponent implements OnInit {
    }
 
   ngOnInit() {
+    // get the room info reserved on the reserve page from /reservation/info/
+    this.http.get(this.urlInfo)
+      .subscribe(reserveRooms => this.reserveRooms = reserveRooms);
+      // this.reserveRooms = [{ pk: 1, "checkin_date": "2018-08-12", ... }]
+      // const reserveRoomInfo = this.reserveRooms[0]; // { pk: 1, "checkin_date": "2018-08-12", ... }
+      // this.reserveRoomPk = reserveRoomInfo.pk;
+      // this.reserveRoomCheckInDate = reserveRoomInfo.checkin_date;
+      // this.reserveRoomStayDayNum = reserveRoomInfo.stay_day_num;
+      // this.reserveRoomTotalPrice = reserveRoomInfo.total_price;
+
     this.userForm = this.fb.group({
       userName: ['', Validators.required],
       userPhone: ['', [
@@ -473,6 +502,7 @@ export class YapenPayComponent implements OnInit {
       this.isCredit = false;
       this.nonBankBookDisplay = 'inline';
       this.creditFormDisplay = 'none';
+      this.payType = '무통장입금';
     }
 
     changeToCredit() {
@@ -480,6 +510,7 @@ export class YapenPayComponent implements OnInit {
       this.isNoBankbook = false;
       this.creditFormDisplay = 'inline';
       this.nonBankBookDisplay = 'none';
+      this.payType = '카드간편결제';
     }
 
     // -- form-change button implementation end --
@@ -525,8 +556,11 @@ export class YapenPayComponent implements OnInit {
     }
 
     checkValidPeriod() {
+      const cardNumber = `${this.cardNumber1.value}-${this.cardNumber2.value}-${this.cardNumber3.value}-${this.cardNumber4.value}`;
+      this.creditCardNumber = cardNumber;
+
       this.creditMonth === 'MM' ? alert('유효기간을 정확하게 입력해 주시기 바랍니다.') :
-      this.credityear === 'YY' ? alert('유효기간을 정확하게 입력해 주시기 바랍니다.') :
+      this.creditYear === 'YY' ? alert('유효기간을 정확하게 입력해 주시기 바랍니다.') :
       this.checkCardPassword();
     }
 
@@ -535,7 +569,7 @@ export class YapenPayComponent implements OnInit {
     }
 
     checkCreditYear(year: string) {
-      this.credityear = year;
+      this.creditYear = year;
     }
 
     checkCardPassword() {
@@ -545,14 +579,18 @@ export class YapenPayComponent implements OnInit {
     changeToCorporation() {
       this.isCorporation = true;
       this.isPerson = false;
+      this.cardType = '법인';
     }
 
     changeToPerson() {
       this.isPerson = true;
       this.isCorporation = false;
+      this.cardType = '개인';
     }
 
     checkBirthday() {
+      this.creditCardPassword = this.cardPassword.value;
+
       this.birthday.errors ? alert('생년월일을 정확하게 입력해 주시기 바랍니다.') : this.checkEmail();
     }
 
@@ -561,6 +599,8 @@ export class YapenPayComponent implements OnInit {
     }
 
     checkEmail() {
+      this.owernerBirthday = this.birthday.value;
+
       this.email.errors ? alert('이메일을 정확하게 입력해 주시기 바랍니다.') : this.postCreditCardInfo();
     }
 
@@ -599,10 +639,64 @@ export class YapenPayComponent implements OnInit {
 
     postCreditCardInfo() {
       console.log('post credit card');
+      this.owernerEmail = this.email.value;
+
+      const newPayInfoCard = {
+        pk: this.reserveRoomPk,
+        checkin_date: this.reserveRoomCheckInDate,
+        stay_day_num: this.reserveRoomStayDayNum,
+        total_price: this.reserveRoomTotalPrice,
+        subscriber: this.subscriber,
+        phone_number: this.phoneNumber,
+        method_of_payment: this.payType,
+        card_number: this.creditCardNumber,
+        expiration_month: this.creditMonth,
+        expiration_year: this.creditYear,
+        card_password: this.creditCardPassword,
+        card_type: this.cardType,
+        birth_date_of_owner: this.owernerBirthday,
+        installment_plan: this.installment,
+        email: this.owernerEmail
+      };
+
+      this.postFinal(newPayInfoCard);
+    }
+
+    postFinal(payload) {
+      console.log('post final');
+
+      this.http.post(this.urlPay, payload)
+      .subscribe(
+        () => {
+          alert('결제가 성공했습니다.');
+          this.router.navigate(['payfinish']);
+        },
+        error => {
+          alert('결제가 실패했습니다.');
+        }
+      );
+
     }
 
     postNonBankbookInfo() {
       console.log('post nonBankbook');
+
+      this.depositorName = this.depositUserName.value;
+
+      const newPayInfoNonBankbook = {
+        pk: this.reserveRoomPk,
+        checkin_date: this.reserveRoomCheckInDate,
+        stay_day_num: this.reserveRoomStayDayNum,
+        total_price: this.reserveRoomTotalPrice,
+        subscriber: this.subscriber,
+        phone_number: this.phoneNumber,
+        method_of_payment: this.payType,
+        deposit_bank: this.depositBank,
+        depositor_name: this.depositorName
+      };
+
+      this.postFinal(newPayInfoNonBankbook);
+
     }
 
 
