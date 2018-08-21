@@ -334,9 +334,9 @@ export class YapenReserveComponent implements OnInit {
 
   rooms: Room[];
 
-  urlDate = 'https://www.pmb.kr/reservation';
+  urlDate = 'https://api.pmb.kr/reservation';
 
-  urlInfo = 'https://www.pmb.kr/reservation/info/';
+  urlInfo = 'https://api.pmb.kr/reservation/info/';
 
   checkedPk = 1;
 
