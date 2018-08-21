@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import { map } from 'rxjs/operators';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -17,7 +17,7 @@ export class StateviewService {
   public data: any = {};
   public res: any[];
   pensionList: any[];
-  baseUrl = 'https://pmb.kr/search/keyword_search/';
+  baseUrl = 'https://api.pmb.kr/search/keyword_search/';
   queryUrl = '?search=';
 
   constructor(private http: HttpClient) { }

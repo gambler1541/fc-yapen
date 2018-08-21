@@ -1,9 +1,3 @@
-.yapenRoomContainer {
-  margin: 0 auto;
-  top: 10px;
-  padding-bottom: 10px;
-}
-
 .yapen-searchContainer {
   width: 1220px;
   position: relative;
@@ -38,13 +32,6 @@ table {
 }
 
 .yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionImageLayer {
-  width: 600px;
-  height: 350px;
-  position: relative;
-  border-right: 1px solid #e6e5e5;
-  cursor: pointer;
-}
-.yapen-searchContainer .yapen-searchLayer .yapen-searchPension .yapen-pensionTbl tr td.yapen-pensionImageLayer .yapen-pensionImage {
   width: 600px;
   height: 350px;
   position: relative;

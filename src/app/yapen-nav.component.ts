@@ -44,7 +44,7 @@ export class YapenNavComponent implements OnInit {
 
   search(value: string) {
     console.log(value);
-    const baseUrl = 'https://pmb.kr/search/keyword_search/?search=' + value;
+    const baseUrl = 'https://api.pmb.kr/search/keyword_search/?search=' + value;
 
     this.http.get<any[]>(baseUrl)
     .subscribe( res => {

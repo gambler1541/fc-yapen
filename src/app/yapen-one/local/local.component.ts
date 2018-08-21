@@ -9,7 +9,7 @@ import {
 } from '@angular/animations';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import { map, filter, scan, tap } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 
@@ -22,13 +22,13 @@ import { forEach } from '@angular/router/src/utils/collection';
       <tr *ngFor="let locations of res; let i = index;">
           <th>
             <label style="margin-left: 15px;">
-              "{{ locations.name }}"
-              <span>({{ locations.pensions_length }})</span>
+              "{{ res[i].name }}"
+              <span>({{ res[i].pensions_length }})</span>
             </label>
           </th>
           <td>
             <ul *ngFor="let subLocation of location[i]; let j = index;">
-              <li (click)="changeArea.emit(location[i][j])">
+              <li data-id="{{ location[i][j].sub_location_no }}" (click)="changeArea.emit(location[i][j].name)">
                 "{{ location[i][j].name }}"
                 <span>({{ location[i][j].pensions_length }})</span>
               </li>
@@ -56,7 +56,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   ]
 })
 export class LocalComponent implements OnInit {
-  url = 'https://www.pmb.kr/location/location-name';
+  url = 'https://api.pmb.kr/location/location-name';
   res: any[];
   location = [];
    // 초기값 설정.
@@ -80,7 +80,7 @@ export class LocalComponent implements OnInit {
           res.filter((pension, i) => {
             if ( pension.name === '가평' || pension.name === '경기') {
                 this.location.push(pension.sublocations);
-                console.log(this.location);
+                // console.log(this.location);
           }
       });
     });

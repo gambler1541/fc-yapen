@@ -7,6 +7,9 @@ import { Subject} from 'rxjs/Subject';
 @Component({
   selector: 'app-yapen-pensionlist',
   template: `
+
+  <p> yapen-pensionlist works! </p>
+  <a [routerLink]="['/reserve/', 1, '2018-08-19']">reserve</a><br>
   <main class="yapenMaincontainer" style="background-color: #f4f4f4;">
     <div class="yapenMainLayer">
       <div class="yapenMaintitle">추천 펜션</div>
@@ -29,16 +32,16 @@ import { Subject} from 'rxjs/Subject';
   </main>
 
   <!-- {{ res | json }} -->
-    <a routerLink="/reserve">reserve</a><br>
-    <a routerLink="/pensiondetail">pensiondetail</a>
   `,
   styleUrls: [`./pensionlist.css`]
 })
 
 export class YapenPensionlistComponent implements OnInit {
-  url = 'https://www.pmb.kr/location';
+  url = 'https://api.pmb.kr/location';
   res: any[];
   // pensionList: any[];
+  results: Object;
+  searchTerm$ = new Subject<string>();
 
   constructor( public stateviewService: StateviewService,
     private http: HttpClient) {
@@ -65,7 +68,7 @@ export class YapenPensionlistComponent implements OnInit {
         //   // }
         //   return false;
         // });
-        // console.log(this.stateviewService.pensionList);
+        console.log(this.stateviewService.pensionList);
       });
   }
 

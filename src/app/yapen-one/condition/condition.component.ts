@@ -14,11 +14,11 @@ import { forEach } from '@angular/router/src/utils/collection';
     <li style="width:260px" class="first-li" (click)="toggle('local')">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-39-plane.png" alt="지역" class="first-img">
       <div id="schLocationText">{{ res }}</div> <!-- 클릭하면 데이터가 바뀌도록  -->
-      <input type="hidden" name="schLoaction" id="schLoaction" [value]="res">
-      <input type="hidden" name="schLoactionCode" id="schLoactionCode" [value]="resid">
+      <input type="hidden" name="schLoaction" id="schLoaction" value="인천/경기/가평">
+      <input type="hidden" name="schLoactionCode" id="schLoactionCode" value="1.001000">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-602-chevron-down.png" alt="펼치기/닫기" class="arrowToggle last-img">
     </li>
-    <li style="width:250px" (click)="toggle('calendar')">
+    <li style="width:250px" (click)="toggle()">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-46-calendar.png" alt="날짜" class="first-img">
       <div id="schStartDateText">2018/07/30 (1박 2일)</div>
       <input type="hidden" name="schStartDate" id="schStartDate" value="2018/07/30">
@@ -45,20 +45,14 @@ import { forEach } from '@angular/router/src/utils/collection';
   `,
   styleUrls: [`./condition.css`]
 })
-export class ConditionComponent implements OnInit {
-  @Input() res: any[];
-  @Input() resid: number;
+export class ConditionComponent {
+  @Input() res: string;
   @Input() people = '전체';
-  location = [];
 
-  url = 'https://www.pmb.kr/location/location-name';
+  url = 'https://api.pmb.kr/location/location-name';
 
   constructor(public stateviewService: StateviewService,
               private http: HttpClient) { }
-
-  ngOnInit() {
-    // this.getLocation();
-  }
 
   toggle(state: string) {
     if (this.stateviewService.state === state) {
@@ -66,24 +60,5 @@ export class ConditionComponent implements OnInit {
     } else {
       this.stateviewService.state = state;
     }
-  }
-
-  searchRoom() {
-    const basedUrl = 'https://www.pmb.kr/search/button_search/button_search/?';
-    this.http.get<any[]>(basedUrl);
-  }
-
-  getLocation() {
-    this.http.get<any[]>(this.url)
-      .subscribe( res => {
-        // console.log(res);
-        this.res = res;
-          res.filter((pension, i) => {
-            if ( pension.name === '가평' || pension.name === '경기') {
-                this.location.push(pension.sublocations);
-                // console.log(this.location);
-          }
-      });
-    });
   }
 }

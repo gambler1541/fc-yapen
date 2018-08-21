@@ -97,7 +97,7 @@ interface Token {
 export class YapenLoginComponent implements OnInit {
   // url = 'http://localhost:3000/token';
   loginForm: FormGroup;
-  url = 'https://pmb.kr/members/login/';
+  url = 'https://api.pmb.kr/members/login/';
 
   constructor(
     public http: HttpClient,

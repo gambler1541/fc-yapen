@@ -71,7 +71,7 @@ export class YapenSignupComponent implements OnInit {
   signup: Signup[];
   signupForm: FormGroup;
  // url = 'http://localhost:3000/signups';
-  url = 'https://pmb.kr/members/signup/';
+  url = 'https://api.pmb.kr/members/signup/';
 
 
   constructor(
