@@ -35,9 +35,9 @@ import { HttpClient } from '@angular/common/http';
               <td>
                 <span>
                   <input type="text" formControlName="userPhone"
-                    [style.border-color]="(isEmptyPhone ? 'rgb(255, 101, 89)' : '')" #userphone>
+                    [style.border-color]="(isEmptyPhone ? 'rgb(255, 101, 89)' : '')" #inputUserPhone>
                     <span class="empty-phone-number" *ngIf="isEmptyPhone">
-                      {{ !userphone.value ? '휴대폰번호가 입력되지 않았습니다.' :  '휴대폰번호가 정확히 입력되지 않았습니다.' }}
+                      {{ !inputUserPhone.value ? '휴대폰번호가 입력되지 않았습니다.' :  '휴대폰번호가 정확히 입력되지 않았습니다.' }}
                     </span>
                   <span class="help">예) 0101234567</span>
                 </span>
@@ -69,7 +69,7 @@ import { HttpClient } from '@angular/common/http';
                     <div class="input-group-text">
                       <input type="radio" aria-label="Radio button for following text input"
                         (change)="changeToCredit()"
-                        [checked]="isCredet" #creditInput>
+                        [checked]="isCredit" #creditInput>
                       <span class="input-credit">카드간편결제</span>
                       <input type="radio" aria-label="Radio button for following text input"
                         (change)="changeToNoBankbook()"
@@ -206,14 +206,16 @@ import { HttpClient } from '@angular/common/http';
             <!-- 신용카드 -->
 
             <!-- 무통장입금 -->
-            <form action="" [style.display]="nonBankBookDisplay">
+            <form [formGroup]="nonBankbookForm" [style.display]="nonBankBookDisplay" novalidate>
               <section class="non-bankbook-form">
                 <table class="table table-bordered">
                 <tbody>
                   <tr>
                     <th scope="row" style="text-align: center;">입금은행</th>
                     <td>
-                      <select class="custom-select">
+                      <select class="custom-select"
+                        (change)="checkBank($event.target.value)"
+                        [style.border-color]="(isBank ? 'rgb(255, 101, 89)' : '')">
                         <option value="01" selected>선택</option>
                         <option value="02">기업은행</option>
                         <option value="03">국민은행</option>
@@ -225,7 +227,8 @@ import { HttpClient } from '@angular/common/http';
                   <tr>
                     <th scope="row" style="text-align: center;">입금자명</th>
                     <td>
-                      <input type="text" placeholder="홍길동">
+                      <input type="text" placeholder="홍길동" formControlName="depositUserName"
+                        [style.border-color]="(isEmptyDepositName ? 'rgb(255, 101, 89)' : '')">
                     </td>
                   </tr>
                 </tbody>
@@ -248,7 +251,7 @@ import { HttpClient } from '@angular/common/http';
     <div class="pay-btn">
       <button type="submit" class="btn btn-primary btn-lg"
       (click)="userName.errors ? (userPhone.errors ? isDoubleEmpty() : isEmptyName = true) :
-      (userPhone.errors ? isEmptyPhone = true : checkCardNumber())">결제하기</button>
+      (userPhone.errors ? isEmptyPhone = true : getUserInfo(inputUserName.value, inputUserPhone.value))">결제하기</button>
     </div>
     <!-- pay button -->
 
@@ -262,7 +265,7 @@ import { HttpClient } from '@angular/common/http';
     .pay-page table th{
       background: #f7f7f7;
     }
-    .pay-page input[type="text"], [type="password"]{
+    .pay-page input[type="text"], [type="password"], select{
       border: 2px solid #dedede;
     }
     .user-info{
@@ -351,11 +354,12 @@ export class YapenPayComponent implements OnInit {
 
   userForm: FormGroup;
   creditCardForm: FormGroup;
+  nonBankbookForm: FormGroup;
 
   isEmptyName = false;
   isEmptyPhone = false;
 
-  isCredet = true;
+  isCredit = true;
   isNoBankbook = false;
 
   creditMonth = 'MM';
@@ -365,6 +369,13 @@ export class YapenPayComponent implements OnInit {
   isCorporation = false;
 
   installment = '일시불';
+
+  isBank = false;
+
+  subscriber;
+  phoneNumber;
+  depositBank = '선택';
+  isEmptyDepositName = false;
 
   urlPay = 'https://www.pmb.kr/reservation/pay/​';
 
@@ -420,6 +431,12 @@ export class YapenPayComponent implements OnInit {
         ]]
 
     });
+
+
+    this.nonBankbookForm = this.fb.group({
+      depositUserName: ['', Validators.required]
+    });
+
   }
 
 
@@ -438,6 +455,13 @@ export class YapenPayComponent implements OnInit {
       this.isEmptyPhone = true;
     }
 
+    getUserInfo(userName: string, userPhone: string) {
+      this.subscriber = userName;
+      this.phoneNumber = userPhone;
+
+      this.isCredit ? this.checkCardNumber() : this.checkNonBankbook();
+    }
+
     // -- user-info form implementation end --
 
 
@@ -446,13 +470,13 @@ export class YapenPayComponent implements OnInit {
 
     changeToNoBankbook() {
       this.isNoBankbook = true;
-      this.isCredet = false;
+      this.isCredit = false;
       this.nonBankBookDisplay = 'inline';
       this.creditFormDisplay = 'none';
     }
 
     changeToCredit() {
-      this.isCredet = true;
+      this.isCredit = true;
       this.isNoBankbook = false;
       this.creditFormDisplay = 'inline';
       this.nonBankBookDisplay = 'none';
@@ -537,11 +561,52 @@ export class YapenPayComponent implements OnInit {
     }
 
     checkEmail() {
-      this.email.errors ? alert('이메일을 정확하게 입력해 주시기 바랍니다.') : alert('no errors');
+      this.email.errors ? alert('이메일을 정확하게 입력해 주시기 바랍니다.') : this.postCreditCardInfo();
+    }
+
+    getCreditCardInfo() {
+      console.log('get credit card info');
     }
 
 
     // -- credit-card form implementation end --
+
+
+
+    // -- nonBankbook form implementation start --
+
+    checkBank(bankValue: string) {
+      console.log('bank');
+      this.depositBank = bankValue;
+    }
+
+    checkNonBankbook() {
+      console.log('get nonbankbook info');
+      this.depositBank === '선택' ? this.isBank = true :
+      this.depositUserName.errors ? this.isEmptyDepositName = true :
+      this.postNonBankbookInfo();
+    }
+
+    get depositUserName() {
+      return this.nonBankbookForm.get('depositUserName');
+    }
+
+
+    // -- nonBankbook form implementation end --
+
+
+    // -- post pay info implementation start --
+
+    postCreditCardInfo() {
+      console.log('post credit card');
+    }
+
+    postNonBankbookInfo() {
+      console.log('post nonBankbook');
+    }
+
+
+    // -- post pay info implementation end --
 
 
     moveToFinishPage() {
