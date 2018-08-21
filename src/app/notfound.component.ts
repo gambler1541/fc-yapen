@@ -13,7 +13,5 @@ export class NotfoundComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

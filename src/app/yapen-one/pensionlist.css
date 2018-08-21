@@ -1,0 +1,79 @@
+.yapenMainContainer {
+  width: 100%;
+  position: relative;
+  text-align: center;
+  padding: 15px 0 0 0;
+}
+
+.yapenMainLayer {
+  margin: 0 auto;
+  position: relative;
+  width: 1220px;
+}
+
+.yapenMainLayer .yapenMaintitle {
+  border-bottom: 2px solid #ddd;
+  width: 100%;
+  text-align: left;
+  padding: 10px 0;
+  padding-top: 20px;
+  font-size: 1.4em;
+}
+
+.yapenMainLayer .pensionMainTbl {
+  width: 1220px;
+  margin: 20px auto;
+  margin-bottom: 0;
+  position: relative;
+  padding: 0;
+  border-spacing: 24px;
+  border: 0;
+  border-collapse: collapse;
+}
+.yapenMainLayer .pensionMainTbl tr {
+  display: block;
+  margin: 2px -12px;
+}
+
+.yapenMainLayer .pensionMainTbl tr td {
+  position: relative;
+  padding: 0 12px;
+  margin: 0 auto;
+  padding-bottom: 24px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.yapenMainLayer .pensionMainTbl tr td .pensionImg{
+  width: 287px;
+  height: 215px;
+  margin: 0 auto;
+  border: 0;
+}
+
+.yapenMainLayer .pensionMainTbl tr td .pensionInfo{
+  padding: 10px 14px;
+  width: 287px;
+  height: 90px;
+  border: 1px solid #ddd;
+  border-top: 0;
+  margin: 0 auto;
+  margin-top: -3px;
+  text-align: left;
+  background-color: #fff;
+  position: relative;
+}
+
+.yapenMainLayer .pensionMainTbl tr td .pensionInfo .pensionName {
+  font-weight: 700;
+  font-size: 16px;
+  position: relative;
+}
+
+.yapenMainLayer .pensionMainTbl tr td .pensionInfo .pensionPrice {
+  font-weight: 700;
+  font-size: 16px;
+  margin-top: 5px;
+  color: #ff6559;
+  position: relative;
+}

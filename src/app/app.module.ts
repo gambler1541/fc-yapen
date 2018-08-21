@@ -1,8 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound.component';
@@ -21,12 +24,20 @@ import { YapenHeaderComponent } from './yapen-header.component';
 import { YapenFooterComponent } from './yapen-footer.component';
 import { YapenContainerComponent } from './yapen-container.component';
 
+import { LocalComponent } from './yapen-one/local/local.component';
+import { PeopleComponent } from './yapen-one/people/people.component';
+import { ThemeComponent } from './yapen-one/theme/theme.component';
+import { ConditionComponent } from './yapen-one/condition/condition.component';
+import { YapenRoomlistComponent } from './yapen-one/yapen-roomlist/yapen-roomlist.component';
+import { SlideComponent } from './yapen-one/slide/slide.component';
+import { RangeDirective } from './range.directive';
+
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: YapenContainerComponent},
   { path: 'pensionlist', component: YapenPensionlistComponent},
   { path: 'pensiondetail', component: YapenPensiondetailComponent},
-  { path: 'reserve', component: YapenReserveComponent},
+  { path: 'reserve/:pk/:date', component: YapenReserveComponent},
   { path: 'pay', component: YapenPayComponent},
   { path: 'payfinish', component: YapenPayfinishComponent},
   { path: 'login', component: YapenLoginComponent},
@@ -51,11 +62,27 @@ const routes: Routes = [
     YapenSignupComponent,
     YapenHeaderComponent,
     YapenFooterComponent,
-    YapenContainerComponent
+    YapenContainerComponent,
+    RangeDirective,
+    LocalComponent,
+    PeopleComponent,
+    ThemeComponent,
+    ConditionComponent,
+    YapenRoomlistComponent,
+    SlideComponent,
   ],
   imports: [
-    BrowserModule, FormsModule, HttpClientModule,
-    RouterModule.forRoot(routes)
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    NgbModule.forRoot(),
+    RouterModule.forRoot(routes),
+    LocalStorageModule.withConfig({
+      prefix: 'yapen',
+      storageType: 'localStorage'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
