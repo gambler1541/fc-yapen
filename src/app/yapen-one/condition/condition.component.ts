@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { StateviewService } from '../stateview.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { map, filter, scan, tap } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 
@@ -18,7 +18,7 @@ import { forEach } from '@angular/router/src/utils/collection';
       <input type="hidden" name="schLoactionCode" id="schLoactionCode" [value]="resid">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-602-chevron-down.png" alt="펼치기/닫기" class="arrowToggle last-img">
     </li>
-    <li style="width:250px" (click)="toggle()">
+    <li style="width:250px" (click)="toggle('calendar')">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-46-calendar.png" alt="날짜" class="first-img">
       <div id="schStartDateText">2018/07/30 (1박 2일)</div>
       <input type="hidden" name="schStartDate" id="schStartDate" value="2018/07/30">
