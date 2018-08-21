@@ -31,6 +31,7 @@ import { ConditionComponent } from './yapen-one/condition/condition.component';
 import { YapenRoomlistComponent } from './yapen-one/yapen-roomlist/yapen-roomlist.component';
 import { SlideComponent } from './yapen-one/slide/slide.component';
 import { RangeDirective } from './range.directive';
+import { SearchcalendarComponent } from './yapen-one/searchcalendar/searchcalendar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -70,6 +71,7 @@ const routes: Routes = [
     ConditionComponent,
     YapenRoomlistComponent,
     SlideComponent,
+    SearchcalendarComponent,
   ],
   imports: [
     BrowserModule,
